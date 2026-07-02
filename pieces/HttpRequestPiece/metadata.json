@@ -1,6 +1,6 @@
 {
     "name": "HttpRequestPiece",
-    "description": "Makes a HTTP request to a given URL.",
+    "description": "Makes HTTP requests to a list of URLs.",
     "dependency": {
         "requirements_file": "requirements_0.txt"
     },

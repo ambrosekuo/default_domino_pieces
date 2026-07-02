@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
 from enum import Enum
+from typing import List
 
 
 class MethodTypes(str, Enum):
@@ -10,8 +11,9 @@ class MethodTypes(str, Enum):
 
 
 class InputModel(BaseModel):
-    url: str = Field(
-        description="URL to make a request to."
+    urls: List[str] = Field(
+        default=[],
+        description="URLs to make requests to."
     )
     method: MethodTypes = Field(
         default=MethodTypes.GET,
@@ -35,6 +37,6 @@ class InputModel(BaseModel):
 
 
 class OutputModel(BaseModel):
-    base64_bytes_data: str = Field(
-        description='Output data as base64 encoded string.'
+    base64_bytes_data: List[str] = Field(
+        description='Output data as base64 encoded strings, one per URL.'
     )
