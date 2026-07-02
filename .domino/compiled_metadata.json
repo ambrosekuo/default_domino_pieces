@@ -311,6 +311,15 @@
                     },
                     "title": "Base64 Bytes Data",
                     "type": "array"
+                },
+                "image_file_paths": {
+                    "default": [],
+                    "description": "Paths to saved response files on shared storage, one per URL. Prefer wiring this to downstream pieces instead of base64_bytes_data.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "title": "Image File Paths",
+                    "type": "array"
                 }
             },
             "required": [
