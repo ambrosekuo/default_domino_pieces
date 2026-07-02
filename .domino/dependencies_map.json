@@ -23,6 +23,6 @@
             "LogPiece"
         ],
         "secrets": [],
-        "source_image": "ghcr.io/ambrosekuo/default_domino_pieces:0.8.8-group0"
+        "source_image": "ghcr.io/ambrosekuo/default_domino_pieces:0.8.9-group0"
     }
 }
