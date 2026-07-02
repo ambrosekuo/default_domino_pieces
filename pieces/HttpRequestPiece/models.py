@@ -38,9 +38,9 @@ class InputModel(BaseModel):
 
 class OutputModel(BaseModel):
     base64_bytes_data: List[str] = Field(
-        description='Output data as base64 encoded strings, one per URL.'
+        description='Base64 encoded response bodies for non-image content. Empty strings for image responses.',
     )
     image_file_paths: List[str] = Field(
         default=[],
-        description='Paths to saved response files on shared storage, one per URL. Prefer wiring this to downstream pieces instead of base64_bytes_data.',
+        description='Paths to saved response files on shared storage, one per URL. Wire this to downstream image pieces.',
     )

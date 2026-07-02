@@ -6,10 +6,10 @@ import base64
 import json
 
 
-CONTENT_TYPE_TO_DISPLAY_FILE_TYPE = {
+CONTENT_TYPE_TO_EXTENSION = {
     "image/png": "png",
-    "image/jpeg": "jpeg",
-    "image/jpg": "jpeg",
+    "image/jpeg": "jpg",
+    "image/jpg": "jpg",
     "image/gif": "gif",
     "image/bmp": "bmp",
     "image/tiff": "tiff",
@@ -24,21 +24,19 @@ class HttpRequestPiece(BasePiece):
     def _normalize_content_type(self, content_type):
         return content_type.lower().split(";")[0].strip()
 
-    def _get_display_file_type(self, content_type):
-        normalized = self._normalize_content_type(content_type)
-        return CONTENT_TYPE_TO_DISPLAY_FILE_TYPE.get(normalized, "txt")
+    def _is_image_response(self, content_type):
+        return self._normalize_content_type(content_type).startswith("image/")
 
     def _get_response_extension(self, content_type):
-        file_type = self._get_display_file_type(content_type)
-        return "jpg" if file_type == "jpeg" else file_type
+        normalized = self._normalize_content_type(content_type)
+        return CONTENT_TYPE_TO_EXTENSION.get(normalized, "bin")
 
     def _save_response_file(self, results_path, index, response):
         content_type = response.headers.get("Content-Type", "")
         extension = self._get_response_extension(content_type)
         file_path = results_path / f"response_{index}.{extension}"
-        file_type = self._get_display_file_type(content_type)
 
-        if file_type in ("json", "html", "txt", "md"):
+        if extension in ("json", "html", "txt", "md"):
             with open(file_path, "w", encoding="utf-8") as f:
                 f.write(response.text)
         else:
@@ -47,24 +45,11 @@ class HttpRequestPiece(BasePiece):
 
         return str(file_path)
 
-    def _build_display_result(self, url_responses, base64_results, response_file_paths):
-        for index, (_, response) in enumerate(url_responses):
-            content_type = response.headers.get("Content-Type", "")
-            if not self._normalize_content_type(content_type).startswith("image/"):
-                continue
-
-            return {
-                "file_type": self._get_display_file_type(content_type),
-                "base64_content": base64_results[index],
-                "file_path": response_file_paths[index],
-            }
-
-        index = 0
-        _, response = url_responses[0]
-        return {
-            "file_type": self._get_display_file_type(response.headers.get("Content-Type", "")),
-            "file_path": response_file_paths[index],
-        }
+    def _encode_response(self, response):
+        content_type = response.headers.get("Content-Type", "")
+        if self._is_image_response(content_type):
+            return ""
+        return base64.b64encode(response.content).decode("utf-8")
 
     def _make_request(self, url, method, headers, body_data):
         if method == "GET":
@@ -100,25 +85,16 @@ class HttpRequestPiece(BasePiece):
         results_path.mkdir(parents=True, exist_ok=True)
 
         base64_results = []
-        url_responses = []
         response_file_paths = []
         try:
             for url in urls:
                 response = self._make_request(url, method, headers, body_data)
-                url_responses.append((url, response))
-                base64_results.append(
-                    base64.b64encode(response.content).decode('utf-8')
-                )
+                base64_results.append(self._encode_response(response))
                 response_file_paths.append(
                     self._save_response_file(results_path, len(response_file_paths), response)
                 )
         except requests.RequestException as e:
             raise Exception(f"HTTP request error: {e}")
-
-        if url_responses:
-            self.display_result = self._build_display_result(
-                url_responses, base64_results, response_file_paths
-            )
 
         return OutputModel(
             base64_bytes_data=base64_results,

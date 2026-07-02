@@ -23,9 +23,8 @@ def _run_piece(input_data, results_path):
     piece = piece_module.HttpRequestPiece.__new__(piece_module.HttpRequestPiece)
     piece.results_path = str(results_path)
     piece.logger = get_configured_logger("test")
-    piece.display_result = None
     output = piece.piece_function(models_module.InputModel(**input_data))
-    return piece, output
+    return output
 
 
 def test_httprequest_get():
@@ -114,7 +113,7 @@ def test_httprequest_delete():
 
 
 def test_httprequest_image_file_paths(tmp_path):
-    _, output = _run_piece(
+    output = _run_piece(
         {
             'urls': [FLOWERS_IMAGE_URL, FLOWERS_IMAGE_URL],
             'method': 'GET',
@@ -123,6 +122,7 @@ def test_httprequest_image_file_paths(tmp_path):
     )
 
     assert len(output.image_file_paths) == 2
+    assert output.base64_bytes_data == ["", ""]
     for file_path in output.image_file_paths:
         assert Path(file_path).exists()
         assert Path(file_path).stat().st_size > 0
@@ -135,7 +135,7 @@ def test_httprequest_image_file_paths_integration(tmp_path):
     filter_module = importlib.import_module("ImageFilterPiece.piece")
     filter_models = importlib.import_module("ImageFilterPiece.models")
 
-    _, http_output = _run_piece(
+    http_output = _run_piece(
         {
             'urls': [FLOWERS_IMAGE_URL, FLOWERS_IMAGE_URL],
             'method': 'GET',
@@ -148,7 +148,6 @@ def test_httprequest_image_file_paths_integration(tmp_path):
     filter_piece = filter_module.ImageFilterPiece.__new__(filter_module.ImageFilterPiece)
     filter_piece.results_path = str(filter_path)
     filter_piece.logger = get_configured_logger("test")
-    filter_piece.display_result = None
 
     filter_output = filter_piece.piece_function(filter_models.InputModel(
         input_images=http_output.image_file_paths,
@@ -157,33 +156,3 @@ def test_httprequest_image_file_paths_integration(tmp_path):
     ))
 
     assert len(filter_output.image_file_paths) == 2
-
-
-def test_httprequest_display_result_shows_image(tmp_path):
-    piece, _ = _run_piece(
-        {
-            'urls': [FLOWERS_IMAGE_URL],
-            'method': 'GET',
-        },
-        tmp_path,
-    )
-
-    assert piece.display_result is not None
-    assert piece.display_result["file_type"] == "jpeg"
-    assert piece.display_result["base64_content"]
-    assert Path(piece.display_result["file_path"]).exists()
-
-
-def test_httprequest_display_result_shows_json_body(tmp_path):
-    piece, _ = _run_piece(
-        {
-            'urls': ['https://jsonplaceholder.typicode.com/posts/1'],
-            'method': 'GET',
-        },
-        tmp_path,
-    )
-
-    assert piece.display_result is not None
-    assert piece.display_result["file_type"] == "json"
-    saved_response = json.loads(Path(piece.display_result["file_path"]).read_text())
-    assert saved_response["id"] == 1
