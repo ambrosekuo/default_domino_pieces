@@ -7,6 +7,12 @@ import sys
 from pathlib import Path
 
 
+FLOWERS_IMAGE_URL = (
+    "https://images.pexels.com/photos/4055758/pexels-photo-4055758.jpeg"
+    "?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+)
+
+
 def _run_piece(input_data, results_path):
     pieces_folder_path = str(Path('.').resolve() / "pieces")
     if pieces_folder_path not in sys.path:
@@ -18,8 +24,8 @@ def _run_piece(input_data, results_path):
     piece.results_path = str(results_path)
     piece.logger = get_configured_logger("test")
     piece.display_result = None
-    piece.piece_function(models_module.InputModel(**input_data))
-    return piece
+    output = piece.piece_function(models_module.InputModel(**input_data))
+    return piece, output
 
 
 def test_httprequest_get():
@@ -107,23 +113,69 @@ def test_httprequest_delete():
     assert output_data['url'] == 'https://httpbin.org/delete'
 
 
-def test_httprequest_display_result_shows_image(tmp_path):
-    piece = _run_piece(
+def test_httprequest_image_file_paths(tmp_path):
+    _, output = _run_piece(
         {
-            'urls': ['https://httpbin.org/image/png'],
+            'urls': [FLOWERS_IMAGE_URL, FLOWERS_IMAGE_URL],
+            'method': 'GET',
+        },
+        tmp_path,
+    )
+
+    assert len(output.image_file_paths) == 2
+    for file_path in output.image_file_paths:
+        assert Path(file_path).exists()
+        assert Path(file_path).stat().st_size > 0
+        assert file_path.endswith('.jpg')
+
+
+def test_httprequest_image_file_paths_integration(tmp_path):
+    sys.path.insert(0, str(Path('.').resolve() / "pieces"))
+
+    filter_module = importlib.import_module("ImageFilterPiece.piece")
+    filter_models = importlib.import_module("ImageFilterPiece.models")
+
+    _, http_output = _run_piece(
+        {
+            'urls': [FLOWERS_IMAGE_URL, FLOWERS_IMAGE_URL],
+            'method': 'GET',
+        },
+        tmp_path,
+    )
+
+    filter_path = tmp_path / "filter"
+    filter_path.mkdir()
+    filter_piece = filter_module.ImageFilterPiece.__new__(filter_module.ImageFilterPiece)
+    filter_piece.results_path = str(filter_path)
+    filter_piece.logger = get_configured_logger("test")
+    filter_piece.display_result = None
+
+    filter_output = filter_piece.piece_function(filter_models.InputModel(
+        input_images=http_output.image_file_paths,
+        sepia=True,
+        output_type="both",
+    ))
+
+    assert len(filter_output.image_file_paths) == 2
+
+
+def test_httprequest_display_result_shows_image(tmp_path):
+    piece, _ = _run_piece(
+        {
+            'urls': [FLOWERS_IMAGE_URL],
             'method': 'GET',
         },
         tmp_path,
     )
 
     assert piece.display_result is not None
-    assert piece.display_result["file_type"] == "png"
+    assert piece.display_result["file_type"] == "jpeg"
     assert piece.display_result["base64_content"]
     assert Path(piece.display_result["file_path"]).exists()
 
 
 def test_httprequest_display_result_shows_json_body(tmp_path):
-    piece = _run_piece(
+    piece, _ = _run_piece(
         {
             'urls': ['https://jsonplaceholder.typicode.com/posts/1'],
             'method': 'GET',

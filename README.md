@@ -20,7 +20,7 @@ Default Domino Pieces that comes pre-installed in every Domino workspace:
 
 The **Image Filter** workflow fetches images over HTTP and applies filters to them. Both pieces support **multiple URLs/images** in a single run:
 
-1. **HttpRequestPiece** — set one or more URLs in the `urls` field. Each URL is fetched with the same method, headers, and body; outputs `base64_bytes_data` as a list (one entry per URL).
-2. **ImageFilterPiece** — connect upstream `base64_bytes_data` to `input_images`, or pass a list of file paths or base64 strings. Outputs `image_base64_strings` and `image_file_paths` as lists (`modified_image_0.png`, `modified_image_1.png`, …).
+1. **HttpRequestPiece** — set one or more URLs in the `urls` field. Each URL is fetched with the same method, headers, and body; outputs `image_file_paths` (saved on shared storage, preferred for downstream) and `base64_bytes_data` (one entry per URL).
+2. **ImageFilterPiece** — connect upstream `image_file_paths` to `input_images` (recommended for multiple images), or `base64_bytes_data` for small single-image runs. Outputs `image_base64_strings` and `image_file_paths` as lists (`modified_image_0.png`, `modified_image_1.png`, …).
 
 In the Domino canvas, list fields render as add/remove rows (same pattern as `LogPiece` `input_array` or `PageScrapperPiece` `search_items`).

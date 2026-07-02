@@ -28,32 +28,15 @@ class HttpRequestPiece(BasePiece):
         normalized = self._normalize_content_type(content_type)
         return CONTENT_TYPE_TO_DISPLAY_FILE_TYPE.get(normalized, "txt")
 
-    def _build_display_result(self, url_responses, base64_results):
-        results_path = Path(self.results_path)
-
-        for index, (_, response) in enumerate(url_responses):
-            content_type = response.headers.get("Content-Type", "")
-            if not self._normalize_content_type(content_type).startswith("image/"):
-                continue
-
-            file_type = self._get_display_file_type(content_type)
-            extension = "jpg" if file_type == "jpeg" else file_type
-            file_path = results_path / f"response_{index}.{extension}"
-            with open(file_path, "wb") as f:
-                f.write(response.content)
-
-            return {
-                "file_type": file_type,
-                "base64_content": base64_results[index],
-                "file_path": str(file_path),
-            }
-
-        index = 0
-        _, response = url_responses[0]
-        content_type = response.headers.get("Content-Type", "")
+    def _get_response_extension(self, content_type):
         file_type = self._get_display_file_type(content_type)
-        extension = "jpg" if file_type == "jpeg" else file_type
+        return "jpg" if file_type == "jpeg" else file_type
+
+    def _save_response_file(self, results_path, index, response):
+        content_type = response.headers.get("Content-Type", "")
+        extension = self._get_response_extension(content_type)
         file_path = results_path / f"response_{index}.{extension}"
+        file_type = self._get_display_file_type(content_type)
 
         if file_type in ("json", "html", "txt", "md"):
             with open(file_path, "w", encoding="utf-8") as f:
@@ -62,9 +45,25 @@ class HttpRequestPiece(BasePiece):
             with open(file_path, "wb") as f:
                 f.write(response.content)
 
+        return str(file_path)
+
+    def _build_display_result(self, url_responses, base64_results, response_file_paths):
+        for index, (_, response) in enumerate(url_responses):
+            content_type = response.headers.get("Content-Type", "")
+            if not self._normalize_content_type(content_type).startswith("image/"):
+                continue
+
+            return {
+                "file_type": self._get_display_file_type(content_type),
+                "base64_content": base64_results[index],
+                "file_path": response_file_paths[index],
+            }
+
+        index = 0
+        _, response = url_responses[0]
         return {
-            "file_type": file_type,
-            "file_path": str(file_path),
+            "file_type": self._get_display_file_type(response.headers.get("Content-Type", "")),
+            "file_path": response_file_paths[index],
         }
 
     def _make_request(self, url, method, headers, body_data):
@@ -97,8 +96,12 @@ class HttpRequestPiece(BasePiece):
             except json.JSONDecodeError:
                 raise Exception("Invalid JSON data in the request body.")
 
+        results_path = Path(self.results_path)
+        results_path.mkdir(parents=True, exist_ok=True)
+
         base64_results = []
         url_responses = []
+        response_file_paths = []
         try:
             for url in urls:
                 response = self._make_request(url, method, headers, body_data)
@@ -106,10 +109,18 @@ class HttpRequestPiece(BasePiece):
                 base64_results.append(
                     base64.b64encode(response.content).decode('utf-8')
                 )
+                response_file_paths.append(
+                    self._save_response_file(results_path, len(response_file_paths), response)
+                )
         except requests.RequestException as e:
             raise Exception(f"HTTP request error: {e}")
 
         if url_responses:
-            self.display_result = self._build_display_result(url_responses, base64_results)
+            self.display_result = self._build_display_result(
+                url_responses, base64_results, response_file_paths
+            )
 
-        return OutputModel(base64_bytes_data=base64_results)
+        return OutputModel(
+            base64_bytes_data=base64_results,
+            image_file_paths=response_file_paths,
+        )
