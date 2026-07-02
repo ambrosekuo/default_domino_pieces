@@ -57,9 +57,20 @@ jobs:
       #     CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Publish images
-        env:
-          GHCR_USERNAME: ${{ github.actor }}
-        run: domino piece publish-images --registry-token ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          import subprocess
+
+          images = sorted(set(json.loads(os.environ.get("PIECES_IMAGES_MAP", "{}")).values()))
+          if not images:
+              raise SystemExit("No images found to publish.")
+          for image in images:
+              print(f"Publishing image {image}...")
+              subprocess.run(["docker", "push", image], check=True)
+              print(f"Finished publishing: {image}")
+          PY
 
       - name: Commit files
         run: |
