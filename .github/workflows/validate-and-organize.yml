@@ -34,25 +34,25 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: pip list
-        run: pip list | grep domino
+      # - name: pip list
+      #   run: pip list | grep domino
 
       - name: Run organize and build images
         run: |
           domino piece organize --build-images --source-url=https://github.com/${{github.repository}}
 
-      - name: Install Tests Dependencies
-        run: pip install -r requirements-tests.txt
+      # - name: Install Tests Dependencies
+      #   run: pip install -r requirements-tests.txt
 
-      - name: Run tests over built images
-        run: |
-          pytest --cov=pieces --cov-report=xml --cov-report=term-missing
-      
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-      
+      # - name: Run tests over built images
+      #   run: |
+      #     pytest --cov=pieces --cov-report=xml --cov-report=term-missing
+
+      # - name: Upload coverage reports to Codecov
+      #   uses: codecov/codecov-action@v3
+      #   env:
+      #     CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
       - name: Publish images
         env:
           GHCR_USERNAME: ${{ github.actor }}

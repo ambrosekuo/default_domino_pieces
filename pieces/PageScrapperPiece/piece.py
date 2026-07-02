@@ -20,8 +20,13 @@ def clean_text(text):
     return text
 
 
+DEFAULT_HEADERS = {
+    "User-Agent": "DominoPageScrapperPiece/1.0 (https://github.com/Tauffer-Consulting/default_domino_pieces)",
+}
+
+
 def extract_content_with_known_tags_classes(url, search_items):
-    response = requests.get(url)
+    response = requests.get(url, headers=DEFAULT_HEADERS)
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, 'html.parser')
         content = []
