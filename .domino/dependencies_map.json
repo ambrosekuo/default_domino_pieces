@@ -5,23 +5,24 @@
             "requirements_file": "requirements_0.txt"
         },
         "pieces": [
+            "GetItemFromArrayPiece",
+            "GetDateTimePiece",
+            "HttpRequestPiece",
+            "StringOperationsPiece",
+            "SaveImagePiece",
+            "ToyDatasetsPiece",
+            "SleepPiece",
+            "YDataProfilingPiece",
+            "DataConversionPiece",
             "CustomPythonPiece",
             "PageScrapperPiece",
-            "HttpRequestPiece",
-            "GetItemFromArrayPiece",
-            "LoremIpsumGeneratorPiece",
             "ToStringPiece",
-            "YDataProfilingPiece",
-            "LogPiece",
-            "SleepPiece",
-            "GetDateTimePiece",
-            "SaveImagePiece",
-            "StringOperationsPiece",
+            "LoremIpsumGeneratorPiece",
             "ImageFilterPiece",
             "StringConditionChecksPiece",
-            "ToyDatasetsPiece",
-            "DataConversionPiece"
+            "LogPiece"
         ],
-        "secrets": []
+        "secrets": [],
+        "source_image": "ghcr.io/ambrosekuo/default_domino_pieces:0.8.7-group0"
     }
 }

@@ -1,4 +1,766 @@
 {
+    "GetItemFromArrayPiece": {
+        "name": "GetItemFromArrayPiece",
+        "dependency": {
+            "dockerfile": null,
+            "requirements_file": "requirements_0.txt"
+        },
+        "tags": [
+            "default",
+            "array"
+        ],
+        "style": {
+            "node_label": "Get Item From Array",
+            "node_type": "default",
+            "node_style": {
+                "backgroundColor": "#ebebeb"
+            },
+            "useIcon": true,
+            "icon_class_name": "fluent:tray-item-remove-24-filled",
+            "iconStyle": {
+                "cursor": "pointer"
+            }
+        },
+        "description": "Get one item from an input array.",
+        "input_schema": {
+            "$defs": {
+                "IndexType": {
+                    "enum": [
+                        "first",
+                        "last",
+                        "random",
+                        "another"
+                    ],
+                    "title": "IndexType",
+                    "type": "string"
+                }
+            },
+            "description": "GetItemFromArrayPiece Input Model",
+            "properties": {
+                "input_array": {
+                    "description": "Input array to get item from.",
+                    "from_upstream": "always",
+                    "items": {},
+                    "title": "Input Array",
+                    "type": "array"
+                },
+                "index": {
+                    "allOf": [
+                        {
+                            "$ref": "#/$defs/IndexType"
+                        }
+                    ],
+                    "default": "first",
+                    "description": "Index of item to get from input array."
+                },
+                "another_index": {
+                    "default": 1,
+                    "description": "Index number of item to get from input array.",
+                    "minimum": 1,
+                    "title": "Another Index",
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "input_array"
+            ],
+            "title": "InputModel",
+            "type": "object"
+        },
+        "output_schema": {
+            "description": "GetItemFromArrayPiece Output Model",
+            "properties": {
+                "output_value": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "items": {},
+                            "type": "array"
+                        },
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "boolean"
+                        },
+                        {
+                            "type": "object"
+                        },
+                        {
+                            "format": "date",
+                            "type": "string"
+                        },
+                        {
+                            "format": "time",
+                            "type": "string"
+                        },
+                        {
+                            "format": "date-time",
+                            "type": "string"
+                        }
+                    ],
+                    "description": "Item from input array at specified index.",
+                    "title": "Output Value"
+                }
+            },
+            "required": [
+                "output_value"
+            ],
+            "title": "OutputModel",
+            "type": "object"
+        },
+        "secrets_schema": null,
+        "source_url": "https://github.com/ambrosekuo/default_domino_pieces/tree/main/pieces/GetItemFromArrayPiece"
+    },
+    "GetDateTimePiece": {
+        "name": "GetDateTimePiece",
+        "dependency": {
+            "dockerfile": null,
+            "requirements_file": "requirements_0.txt"
+        },
+        "tags": [
+            "default",
+            "datetime"
+        ],
+        "style": {
+            "node_label": "Get Datetime",
+            "node_type": "default",
+            "node_style": {
+                "backgroundColor": "#ebebeb"
+            },
+            "useIcon": true,
+            "icon_class_name": "fa:calendar-o",
+            "iconStyle": {
+                "cursor": "pointer"
+            }
+        },
+        "description": "A Piece that gets system's current date and time.",
+        "input_schema": {
+            "$defs": {
+                "TZOptions": {
+                    "enum": [
+                        "(UTC-11) - Pacific/Pago_Pago",
+                        "(UTC-10) - US/Hawaii",
+                        "(UTC-09) - Pacific/Gambier",
+                        "(UTC-08) - US/Alaska",
+                        "(UTC-07) - US/Pacific",
+                        "(UTC-06) - US/Mountain",
+                        "(UTC-05) - US/Central",
+                        "(UTC-04) - US/Eastern",
+                        "(UTC-03) - Canada/Atlantic",
+                        "(UTC-02) - Atlantic/South_Georgia",
+                        "(UTC-01) - Atlantic/Cape_Verde",
+                        "(UTC+00) - UTC",
+                        "(UTC+01) - Europe/London",
+                        "(UTC+02) - Europe/Zurich",
+                        "(UTC+03) - Indian/Mayotte",
+                        "(UTC+04) - Asia/Tehran",
+                        "(UTC+05) - Asia/Kathmandu",
+                        "(UTC+06) - Indian/Cocos",
+                        "(UTC+07) - Indian/Christmas",
+                        "(UTC+08) - Australia/Eucla",
+                        "(UTC+09) - Australia/Darwin",
+                        "(UTC+10) - Australia/Lord_Howe",
+                        "(UTC+11) - Pacific/Pohnpei",
+                        "(UTC+12) - Pacific/Chatham",
+                        "(UTC+13) - Pacific/Tongatapu",
+                        "(UTC+14) - Pacific/Kiritimati"
+                    ],
+                    "title": "TZOptions",
+                    "type": "string"
+                }
+            },
+            "description": "GetDateTimePiece Input Model",
+            "properties": {
+                "use_timezone": {
+                    "default": false,
+                    "description": "Whether to use a timezone for the timestamp.",
+                    "title": "Use Timezone",
+                    "type": "boolean"
+                },
+                "timezone": {
+                    "allOf": [
+                        {
+                            "$ref": "#/$defs/TZOptions"
+                        }
+                    ],
+                    "default": "(UTC+00) - UTC",
+                    "description": "Timezone to use for timestamp."
+                }
+            },
+            "title": "InputModel",
+            "type": "object"
+        },
+        "output_schema": {
+            "description": "GetDateTimePiece Output Model",
+            "properties": {
+                "date": {
+                    "description": "Date of the timestamp, in ISO format.",
+                    "format": "date",
+                    "title": "Date",
+                    "type": "string"
+                },
+                "time": {
+                    "description": "Time of the timestamp, in ISO format.",
+                    "format": "time",
+                    "title": "Time",
+                    "type": "string"
+                },
+                "datetime": {
+                    "description": "Datetime of the timestamp, in ISO format.",
+                    "format": "date-time",
+                    "title": "Datetime",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "date",
+                "time",
+                "datetime"
+            ],
+            "title": "OutputModel",
+            "type": "object"
+        },
+        "secrets_schema": null,
+        "source_url": "https://github.com/ambrosekuo/default_domino_pieces/tree/main/pieces/GetDateTimePiece"
+    },
+    "HttpRequestPiece": {
+        "name": "HttpRequestPiece",
+        "dependency": {
+            "dockerfile": null,
+            "requirements_file": "requirements_0.txt"
+        },
+        "tags": [
+            "default",
+            "http",
+            "request"
+        ],
+        "style": {
+            "node_label": "HTTP Request (fork)",
+            "node_type": "default",
+            "node_style": {
+                "backgroundColor": "#ebebeb"
+            },
+            "useIcon": true,
+            "icon_class_name": "material-symbols:send",
+            "iconStyle": {
+                "cursor": "pointer"
+            }
+        },
+        "description": "Makes HTTP requests to a list of URLs.",
+        "input_schema": {
+            "$defs": {
+                "MethodTypes": {
+                    "enum": [
+                        "GET",
+                        "POST",
+                        "PUT",
+                        "DELETE"
+                    ],
+                    "title": "MethodTypes",
+                    "type": "string"
+                }
+            },
+            "properties": {
+                "urls": {
+                    "default": [],
+                    "description": "URLs to make requests to.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "title": "Urls",
+                    "type": "array"
+                },
+                "method": {
+                    "allOf": [
+                        {
+                            "$ref": "#/$defs/MethodTypes"
+                        }
+                    ],
+                    "default": "GET",
+                    "description": "HTTP method to use."
+                },
+                "bearer_token": {
+                    "default": null,
+                    "description": "Bearer token to use for authentication.",
+                    "title": "Bearer Token",
+                    "type": "string"
+                },
+                "body_json_data": {
+                    "default": "{\n    \"key_1\": \"value_1\",\n    \"key_2\": \"value_2\"\n}\n",
+                    "description": "JSON data to send in the request body.",
+                    "title": "Body Json Data",
+                    "type": "string",
+                    "widget": "codeeditor-json"
+                }
+            },
+            "title": "InputModel",
+            "type": "object"
+        },
+        "output_schema": {
+            "properties": {
+                "base64_bytes_data": {
+                    "description": "Output data as base64 encoded strings, one per URL.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "title": "Base64 Bytes Data",
+                    "type": "array"
+                }
+            },
+            "required": [
+                "base64_bytes_data"
+            ],
+            "title": "OutputModel",
+            "type": "object"
+        },
+        "secrets_schema": null,
+        "source_url": "https://github.com/ambrosekuo/default_domino_pieces/tree/main/pieces/HttpRequestPiece"
+    },
+    "StringOperationsPiece": {
+        "name": "StringOperationsPiece",
+        "dependency": {
+            "dockerfile": null,
+            "requirements_file": "requirements_0.txt"
+        },
+        "tags": [
+            "default",
+            "string"
+        ],
+        "style": {
+            "node_label": "String Operations",
+            "node_type": "default",
+            "node_style": {
+                "backgroundColor": "#ebebeb"
+            },
+            "useIcon": true,
+            "icon_class_name": "tabler:sort-a-z",
+            "iconStyle": {
+                "cursor": "pointer"
+            }
+        },
+        "description": "A Piece that performs string operations",
+        "input_schema": {
+            "$defs": {
+                "OperationItem": {
+                    "properties": {
+                        "operation": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/$defs/OperationsTypes"
+                                }
+                            ],
+                            "description": "Operation to perform. Options: `concatenate`, `lower_case`, `upper_case`, `split_by`, `replace_by`.",
+                            "from_upstream": "never"
+                        },
+                        "second_argument": {
+                            "default": "",
+                            "description": "Value for the second argument.",
+                            "title": "Second Argument",
+                            "type": "string"
+                        },
+                        "auxiliary_argument": {
+                            "default": "",
+                            "description": "Auxiliary argument for `split_by` and `replace_by` operations.\nIf `split_by` is selected, this argument will be used as the index of the split array.\nIf `replace_by` is selected, this argument will be used as the string to replace.\n",
+                            "title": "Auxiliary Argument",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "operation"
+                    ],
+                    "title": "OperationItem",
+                    "type": "object"
+                },
+                "OperationsTypes": {
+                    "enum": [
+                        "concatenate",
+                        "lower_case",
+                        "upper_case",
+                        "split_by",
+                        "replace_by",
+                        "strip_spaces"
+                    ],
+                    "title": "OperationsTypes",
+                    "type": "string"
+                }
+            },
+            "properties": {
+                "first_argument": {
+                    "description": "Value for the first argument.",
+                    "title": "First Argument",
+                    "type": "string"
+                },
+                "operations": {
+                    "description": "Sequence of operations to perform.",
+                    "items": {
+                        "$ref": "#/$defs/OperationItem"
+                    },
+                    "title": "Operations",
+                    "type": "array"
+                }
+            },
+            "required": [
+                "first_argument",
+                "operations"
+            ],
+            "title": "InputModel",
+            "type": "object"
+        },
+        "output_schema": {
+            "properties": {
+                "output_string": {
+                    "description": "Output string.",
+                    "title": "Output String",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "output_string"
+            ],
+            "title": "OutputModel",
+            "type": "object"
+        },
+        "secrets_schema": null,
+        "source_url": "https://github.com/ambrosekuo/default_domino_pieces/tree/main/pieces/StringOperationsPiece"
+    },
+    "SaveImagePiece": {
+        "name": "SaveImagePiece",
+        "dependency": {
+            "dockerfile": null,
+            "requirements_file": "requirements_0.txt"
+        },
+        "tags": [
+            "default",
+            "image"
+        ],
+        "style": {
+            "node_label": "Save Image",
+            "node_type": "default",
+            "node_style": {
+                "backgroundColor": "#ebebeb"
+            },
+            "useIcon": true,
+            "icon_class_name": "material-symbols:image-outline",
+            "iconStyle": {
+                "cursor": "pointer"
+            }
+        },
+        "description": "Save base64 as image file to results folder.",
+        "input_schema": {
+            "properties": {
+                "base64_data": {
+                    "description": "Input data to be saved as image.",
+                    "title": "Base64 Data",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "base64_data"
+            ],
+            "title": "InputModel",
+            "type": "object"
+        },
+        "output_schema": {
+            "properties": {
+                "output_image_path": {
+                    "description": "Output file path of the saved image.",
+                    "title": "Output Image Path",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "output_image_path"
+            ],
+            "title": "OutputModel",
+            "type": "object"
+        },
+        "secrets_schema": null,
+        "source_url": "https://github.com/ambrosekuo/default_domino_pieces/tree/main/pieces/SaveImagePiece"
+    },
+    "ToyDatasetsPiece": {
+        "name": "ToyDatasetsPiece",
+        "dependency": {
+            "dockerfile": null,
+            "requirements_file": "requirements_0.txt"
+        },
+        "tags": [
+            "default",
+            "datasets"
+        ],
+        "style": {
+            "node_label": "Toy Datasets",
+            "node_type": "default",
+            "node_style": {
+                "backgroundColor": "#ebebeb"
+            },
+            "useIcon": true,
+            "icon_class_name": "lucide:toy-brick",
+            "iconStyle": {
+                "cursor": "pointer"
+            }
+        },
+        "description": "Load toy datasets from scikit-learn",
+        "input_schema": {
+            "$defs": {
+                "DatasetName": {
+                    "enum": [
+                        "iris",
+                        "diabetes",
+                        "digits",
+                        "wine",
+                        "breast_cancer",
+                        "linnerrud"
+                    ],
+                    "title": "DatasetName",
+                    "type": "string"
+                }
+            },
+            "properties": {
+                "dataset": {
+                    "allOf": [
+                        {
+                            "$ref": "#/$defs/DatasetName"
+                        }
+                    ],
+                    "default": "iris",
+                    "title": "Dataset name"
+                }
+            },
+            "title": "InputModel",
+            "type": "object"
+        },
+        "output_schema": {
+            "properties": {
+                "file_path": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "title": "File path"
+                }
+            },
+            "title": "OutputModel",
+            "type": "object"
+        },
+        "secrets_schema": null,
+        "source_url": "https://github.com/ambrosekuo/default_domino_pieces/tree/main/pieces/ToyDatasetsPiece"
+    },
+    "SleepPiece": {
+        "name": "SleepPiece",
+        "dependency": {
+            "dockerfile": null,
+            "requirements_file": "requirements_0.txt"
+        },
+        "tags": [
+            "default",
+            "sleep"
+        ],
+        "style": {
+            "node_label": "Sleep",
+            "node_type": "default",
+            "node_style": {
+                "backgroundColor": "#ebebeb"
+            },
+            "useIcon": true,
+            "icon_class_name": "fa-solid:hourglass-start",
+            "iconStyle": {
+                "cursor": "pointer"
+            }
+        },
+        "description": "A Piece that sleeps for a given number of seconds.",
+        "input_schema": {
+            "description": "Sleep Piece Input Model",
+            "properties": {
+                "sleep_time": {
+                    "default": 1,
+                    "description": "Number of seconds to sleep",
+                    "title": "Sleep Time",
+                    "type": "number"
+                }
+            },
+            "title": "InputModel",
+            "type": "object"
+        },
+        "output_schema": {
+            "description": "Sleep Piece Output Model",
+            "properties": {
+                "message": {
+                    "description": "Sleep piece executed",
+                    "title": "Message",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "message"
+            ],
+            "title": "OutputModel",
+            "type": "object"
+        },
+        "secrets_schema": null,
+        "source_url": "https://github.com/ambrosekuo/default_domino_pieces/tree/main/pieces/SleepPiece"
+    },
+    "YDataProfilingPiece": {
+        "name": "YDataProfilingPiece",
+        "dependency": {
+            "dockerfile": null,
+            "requirements_file": "requirements_0.txt"
+        },
+        "tags": [
+            "default",
+            "eda"
+        ],
+        "style": {
+            "node_label": "Data Profiling",
+            "node_type": "default",
+            "node_style": {
+                "backgroundColor": "#ebebeb"
+            },
+            "useIcon": true,
+            "icon_class_name": "mingcute:profile-line",
+            "iconStyle": {
+                "cursor": "pointer"
+            }
+        },
+        "description": "Piece that uses ydata-profiling to create fast EDA.",
+        "input_schema": {
+            "properties": {
+                "data_path": {
+                    "description": "Path to the CSV file to be profiled",
+                    "from_upstream": "always",
+                    "title": "CSV file path",
+                    "type": "string"
+                },
+                "report_tile": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": "Profiling Report",
+                    "description": "Title of the report",
+                    "title": "Report title"
+                }
+            },
+            "required": [
+                "data_path"
+            ],
+            "title": "InputModel",
+            "type": "object"
+        },
+        "output_schema": {
+            "properties": {
+                "profile_file_path": {
+                    "description": "Path to the output file.",
+                    "title": "Output file path",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "profile_file_path"
+            ],
+            "title": "OutputModel",
+            "type": "object"
+        },
+        "secrets_schema": null,
+        "source_url": "https://github.com/ambrosekuo/default_domino_pieces/tree/main/pieces/YDataProfilingPiece"
+    },
+    "DataConversionPiece": {
+        "name": "DataConversionPiece",
+        "dependency": {
+            "dockerfile": null,
+            "requirements_file": "requirements_0.txt"
+        },
+        "tags": [
+            "data",
+            "conversion",
+            "default"
+        ],
+        "style": {
+            "node_label": "Data Conversion Piece",
+            "node_type": "default",
+            "node_style": {
+                "backgroundColor": "#ebebeb"
+            },
+            "useIcon": true,
+            "icon_class_name": "icon-park-outline:file-conversion",
+            "iconStyle": {
+                "cursor": "pointer"
+            }
+        },
+        "description": "Convert data from one format to another",
+        "input_schema": {
+            "$defs": {
+                "DataFormatOption": {
+                    "enum": [
+                        "csv",
+                        "json"
+                    ],
+                    "title": "DataFormatOption",
+                    "type": "string"
+                }
+            },
+            "properties": {
+                "input_data": {
+                    "description": "Input data to be converted. Can be a file path or data as string.",
+                    "title": "Input Data",
+                    "type": "string"
+                },
+                "input_data_format": {
+                    "allOf": [
+                        {
+                            "$ref": "#/$defs/DataFormatOption"
+                        }
+                    ],
+                    "default": "csv",
+                    "description": "Input data format to be converted."
+                },
+                "output_data_format": {
+                    "allOf": [
+                        {
+                            "$ref": "#/$defs/DataFormatOption"
+                        }
+                    ],
+                    "default": "json",
+                    "description": "Output data format."
+                }
+            },
+            "required": [
+                "input_data"
+            ],
+            "title": "InputModel",
+            "type": "object"
+        },
+        "output_schema": {
+            "properties": {
+                "output_file_path": {
+                    "description": "Path to the converted file.",
+                    "title": "Output File Path",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "output_file_path"
+            ],
+            "title": "OutputModel",
+            "type": "object"
+        },
+        "secrets_schema": null,
+        "source_url": "https://github.com/ambrosekuo/default_domino_pieces/tree/main/pieces/DataConversionPiece"
+    },
     "CustomPythonPiece": {
         "name": "CustomPythonPiece",
         "dependency": {
@@ -273,291 +1035,6 @@
         "secrets_schema": null,
         "source_url": "https://github.com/ambrosekuo/default_domino_pieces/tree/main/pieces/PageScrapperPiece"
     },
-    "HttpRequestPiece": {
-        "name": "HttpRequestPiece",
-        "dependency": {
-            "dockerfile": null,
-            "requirements_file": "requirements_0.txt"
-        },
-        "tags": [
-            "default",
-            "http",
-            "request"
-        ],
-        "style": {
-            "node_label": "HTTP Request (fork)",
-            "node_type": "default",
-            "node_style": {
-                "backgroundColor": "#ebebeb"
-            },
-            "useIcon": true,
-            "icon_class_name": "material-symbols:send",
-            "iconStyle": {
-                "cursor": "pointer"
-            }
-        },
-        "description": "Makes HTTP requests to a list of URLs.",
-        "input_schema": {
-            "$defs": {
-                "MethodTypes": {
-                    "enum": [
-                        "GET",
-                        "POST",
-                        "PUT",
-                        "DELETE"
-                    ],
-                    "title": "MethodTypes",
-                    "type": "string"
-                }
-            },
-            "properties": {
-                "urls": {
-                    "default": [],
-                    "description": "URLs to make requests to.",
-                    "items": {
-                        "type": "string"
-                    },
-                    "title": "Urls",
-                    "type": "array"
-                },
-                "method": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/MethodTypes"
-                        }
-                    ],
-                    "default": "GET",
-                    "description": "HTTP method to use."
-                },
-                "bearer_token": {
-                    "default": null,
-                    "description": "Bearer token to use for authentication.",
-                    "title": "Bearer Token",
-                    "type": "string"
-                },
-                "body_json_data": {
-                    "default": "{\n    \"key_1\": \"value_1\",\n    \"key_2\": \"value_2\"\n}\n",
-                    "description": "JSON data to send in the request body.",
-                    "title": "Body Json Data",
-                    "type": "string",
-                    "widget": "codeeditor-json"
-                }
-            },
-            "title": "InputModel",
-            "type": "object"
-        },
-        "output_schema": {
-            "properties": {
-                "base64_bytes_data": {
-                    "description": "Output data as base64 encoded strings, one per URL.",
-                    "items": {
-                        "type": "string"
-                    },
-                    "title": "Base64 Bytes Data",
-                    "type": "array"
-                }
-            },
-            "required": [
-                "base64_bytes_data"
-            ],
-            "title": "OutputModel",
-            "type": "object"
-        },
-        "secrets_schema": null,
-        "source_url": "https://github.com/ambrosekuo/default_domino_pieces/tree/main/pieces/HttpRequestPiece"
-    },
-    "GetItemFromArrayPiece": {
-        "name": "GetItemFromArrayPiece",
-        "dependency": {
-            "dockerfile": null,
-            "requirements_file": "requirements_0.txt"
-        },
-        "tags": [
-            "default",
-            "array"
-        ],
-        "style": {
-            "node_label": "Get Item From Array",
-            "node_type": "default",
-            "node_style": {
-                "backgroundColor": "#ebebeb"
-            },
-            "useIcon": true,
-            "icon_class_name": "fluent:tray-item-remove-24-filled",
-            "iconStyle": {
-                "cursor": "pointer"
-            }
-        },
-        "description": "Get one item from an input array.",
-        "input_schema": {
-            "$defs": {
-                "IndexType": {
-                    "enum": [
-                        "first",
-                        "last",
-                        "random",
-                        "another"
-                    ],
-                    "title": "IndexType",
-                    "type": "string"
-                }
-            },
-            "description": "GetItemFromArrayPiece Input Model",
-            "properties": {
-                "input_array": {
-                    "description": "Input array to get item from.",
-                    "from_upstream": "always",
-                    "items": {},
-                    "title": "Input Array",
-                    "type": "array"
-                },
-                "index": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/IndexType"
-                        }
-                    ],
-                    "default": "first",
-                    "description": "Index of item to get from input array."
-                },
-                "another_index": {
-                    "default": 1,
-                    "description": "Index number of item to get from input array.",
-                    "minimum": 1,
-                    "title": "Another Index",
-                    "type": "integer"
-                }
-            },
-            "required": [
-                "input_array"
-            ],
-            "title": "InputModel",
-            "type": "object"
-        },
-        "output_schema": {
-            "description": "GetItemFromArrayPiece Output Model",
-            "properties": {
-                "output_value": {
-                    "anyOf": [
-                        {
-                            "type": "string"
-                        },
-                        {
-                            "items": {},
-                            "type": "array"
-                        },
-                        {
-                            "type": "integer"
-                        },
-                        {
-                            "type": "number"
-                        },
-                        {
-                            "type": "boolean"
-                        },
-                        {
-                            "type": "object"
-                        },
-                        {
-                            "format": "date",
-                            "type": "string"
-                        },
-                        {
-                            "format": "time",
-                            "type": "string"
-                        },
-                        {
-                            "format": "date-time",
-                            "type": "string"
-                        }
-                    ],
-                    "description": "Item from input array at specified index.",
-                    "title": "Output Value"
-                }
-            },
-            "required": [
-                "output_value"
-            ],
-            "title": "OutputModel",
-            "type": "object"
-        },
-        "secrets_schema": null,
-        "source_url": "https://github.com/ambrosekuo/default_domino_pieces/tree/main/pieces/GetItemFromArrayPiece"
-    },
-    "LoremIpsumGeneratorPiece": {
-        "name": "LoremIpsumGeneratorPiece",
-        "dependency": {
-            "dockerfile": null,
-            "requirements_file": "requirements_0.txt"
-        },
-        "tags": [
-            "default",
-            "text"
-        ],
-        "style": {
-            "node_label": "Lorem Ipsum Generator",
-            "node_type": "default",
-            "node_style": {
-                "backgroundColor": "#ebebeb"
-            },
-            "useIcon": true,
-            "icon_class_name": "carbon:character-sentence-case",
-            "iconStyle": {
-                "cursor": "pointer"
-            }
-        },
-        "description": "A Piece that generates Lorem Ipsum text.",
-        "input_schema": {
-            "$defs": {
-                "ItemsType": {
-                    "enum": [
-                        "words",
-                        "sentences",
-                        "paragraphs"
-                    ],
-                    "title": "ItemsType",
-                    "type": "string"
-                }
-            },
-            "description": "LoremIpsumGeneratorPiece Input Model",
-            "properties": {
-                "items": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/ItemsType"
-                        }
-                    ],
-                    "default": "words",
-                    "description": "Type of items to generate."
-                },
-                "number_of_items": {
-                    "default": 1,
-                    "description": "Number of items to generate.",
-                    "title": "Number Of Items",
-                    "type": "integer"
-                }
-            },
-            "title": "InputModel",
-            "type": "object"
-        },
-        "output_schema": {
-            "description": "LoremIpsumGeneratorPiece Output Model",
-            "properties": {
-                "output_text": {
-                    "description": "Generated text.",
-                    "title": "Output Text",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "output_text"
-            ],
-            "title": "OutputModel",
-            "type": "object"
-        },
-        "secrets_schema": null,
-        "source_url": "https://github.com/ambrosekuo/default_domino_pieces/tree/main/pieces/LoremIpsumGeneratorPiece"
-    },
     "ToStringPiece": {
         "name": "ToStringPiece",
         "dependency": {
@@ -647,635 +1124,79 @@
         "secrets_schema": null,
         "source_url": "https://github.com/ambrosekuo/default_domino_pieces/tree/main/pieces/ToStringPiece"
     },
-    "YDataProfilingPiece": {
-        "name": "YDataProfilingPiece",
+    "LoremIpsumGeneratorPiece": {
+        "name": "LoremIpsumGeneratorPiece",
         "dependency": {
             "dockerfile": null,
             "requirements_file": "requirements_0.txt"
         },
         "tags": [
             "default",
-            "eda"
+            "text"
         ],
         "style": {
-            "node_label": "Data Profiling",
+            "node_label": "Lorem Ipsum Generator",
             "node_type": "default",
             "node_style": {
                 "backgroundColor": "#ebebeb"
             },
             "useIcon": true,
-            "icon_class_name": "mingcute:profile-line",
+            "icon_class_name": "carbon:character-sentence-case",
             "iconStyle": {
                 "cursor": "pointer"
             }
         },
-        "description": "Piece that uses ydata-profiling to create fast EDA.",
-        "input_schema": {
-            "properties": {
-                "data_path": {
-                    "description": "Path to the CSV file to be profiled",
-                    "from_upstream": "always",
-                    "title": "CSV file path",
-                    "type": "string"
-                },
-                "report_tile": {
-                    "anyOf": [
-                        {
-                            "type": "string"
-                        },
-                        {
-                            "type": "null"
-                        }
-                    ],
-                    "default": "Profiling Report",
-                    "description": "Title of the report",
-                    "title": "Report title"
-                }
-            },
-            "required": [
-                "data_path"
-            ],
-            "title": "InputModel",
-            "type": "object"
-        },
-        "output_schema": {
-            "properties": {
-                "profile_file_path": {
-                    "description": "Path to the output file.",
-                    "title": "Output file path",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "profile_file_path"
-            ],
-            "title": "OutputModel",
-            "type": "object"
-        },
-        "secrets_schema": null,
-        "source_url": "https://github.com/ambrosekuo/default_domino_pieces/tree/main/pieces/YDataProfilingPiece"
-    },
-    "LogPiece": {
-        "name": "LogPiece",
-        "dependency": {
-            "dockerfile": null,
-            "requirements_file": "requirements_0.txt"
-        },
-        "tags": [
-            "default",
-            "log"
-        ],
-        "style": {
-            "node_label": "Log",
-            "node_type": "default",
-            "node_style": {
-                "backgroundColor": "#ebebeb"
-            },
-            "useIcon": true,
-            "icon_class_name": "fa-solid:file-alt",
-            "iconStyle": {
-                "cursor": "pointer"
-            }
-        },
-        "description": "A Piece that logs its inputs.",
+        "description": "A Piece that generates Lorem Ipsum text.",
         "input_schema": {
             "$defs": {
-                "InputEnum": {
+                "ItemsType": {
                     "enum": [
-                        "option1",
-                        "option2",
-                        "option3"
+                        "words",
+                        "sentences",
+                        "paragraphs"
                     ],
-                    "title": "InputEnum",
+                    "title": "ItemsType",
                     "type": "string"
                 }
             },
-            "description": "LogPiece Input Model",
+            "description": "LoremIpsumGeneratorPiece Input Model",
             "properties": {
-                "input_str": {
-                    "default": "default value",
-                    "description": "Input string to be logged.",
-                    "title": "Input Str",
-                    "type": "string"
-                },
-                "input_int": {
-                    "default": 10,
-                    "description": "Input integer to be logged.",
-                    "title": "Input Int",
-                    "type": "integer"
-                },
-                "input_float": {
-                    "default": 10.5,
-                    "description": "Input float to be logged.",
-                    "title": "Input Float",
-                    "type": "number"
-                },
-                "input_bool": {
-                    "default": false,
-                    "description": "Input boolean to be logged.",
-                    "title": "Input Bool",
-                    "type": "boolean"
-                },
-                "input_enum": {
+                "items": {
                     "allOf": [
                         {
-                            "$ref": "#/$defs/InputEnum"
+                            "$ref": "#/$defs/ItemsType"
                         }
                     ],
-                    "default": "option1",
-                    "description": "Input enum to be logged."
+                    "default": "words",
+                    "description": "Type of items to generate."
                 },
-                "input_date": {
-                    "default": "2023-01-01",
-                    "description": "Input date to be logged.",
-                    "format": "date",
-                    "title": "Input Date",
-                    "type": "string"
-                },
-                "input_time": {
-                    "default": "16:20:00",
-                    "description": "Input time to be logged.",
-                    "format": "time",
-                    "title": "Input Time",
-                    "type": "string"
-                },
-                "input_datetime": {
-                    "default": "2023-01-01T16:20:00",
-                    "description": "Input datetime to be logged.",
-                    "format": "date-time",
-                    "title": "Input Datetime",
-                    "type": "string"
-                },
-                "input_array": {
-                    "default": [
-                        "default_1",
-                        "default_2",
-                        "default_3"
-                    ],
-                    "description": "Input array to be logged.",
-                    "items": {
-                        "type": "string"
-                    },
-                    "title": "Input Array",
-                    "type": "array"
-                },
-                "input_code": {
-                    "default": "print('Hello world!')",
-                    "description": "Input code to be logged.",
-                    "title": "Input Code",
-                    "type": "string",
-                    "widget": "codeeditor"
-                }
-            },
-            "title": "InputModel",
-            "type": "object"
-        },
-        "output_schema": {
-            "description": "LogPiece Output Model",
-            "properties": {
-                "output_log": {
-                    "description": "All values logged.",
-                    "title": "Output Log",
-                    "type": "string"
-                },
-                "output_str": {
-                    "anyOf": [
-                        {
-                            "type": "string"
-                        },
-                        {
-                            "type": "null"
-                        }
-                    ],
-                    "description": "Output string logged.",
-                    "title": "Output Str"
-                },
-                "output_int": {
-                    "anyOf": [
-                        {
-                            "type": "integer"
-                        },
-                        {
-                            "type": "null"
-                        }
-                    ],
-                    "description": "Output integer logged.",
-                    "title": "Output Int"
-                },
-                "output_float": {
-                    "anyOf": [
-                        {
-                            "type": "number"
-                        },
-                        {
-                            "type": "null"
-                        }
-                    ],
-                    "description": "Output float logged.",
-                    "title": "Output Float"
-                },
-                "output_bool": {
-                    "anyOf": [
-                        {
-                            "type": "boolean"
-                        },
-                        {
-                            "type": "null"
-                        }
-                    ],
-                    "description": "Output boolean logged.",
-                    "title": "Output Bool"
-                },
-                "output_enum": {
-                    "anyOf": [
-                        {
-                            "type": "string"
-                        },
-                        {
-                            "type": "null"
-                        }
-                    ],
-                    "description": "Output enum logged.",
-                    "title": "Output Enum"
-                },
-                "output_date": {
-                    "description": "Output date logged.",
-                    "format": "date",
-                    "title": "Output Date",
-                    "type": "string"
-                },
-                "output_time": {
-                    "description": "Output time logged.",
-                    "format": "time",
-                    "title": "Output Time",
-                    "type": "string"
-                },
-                "output_datetime": {
-                    "description": "Output datetime logged.",
-                    "format": "date-time",
-                    "title": "Output Datetime",
-                    "type": "string"
-                },
-                "output_array": {
-                    "description": "Output array logged.",
-                    "items": {
-                        "type": "string"
-                    },
-                    "title": "Output Array",
-                    "type": "array"
-                },
-                "output_code": {
-                    "description": "Output code logged.",
-                    "title": "Output Code",
-                    "type": "string",
-                    "widget": "codeeditor"
-                }
-            },
-            "required": [
-                "output_log",
-                "output_str",
-                "output_int",
-                "output_float",
-                "output_bool",
-                "output_enum",
-                "output_date",
-                "output_time",
-                "output_datetime",
-                "output_array",
-                "output_code"
-            ],
-            "title": "OutputModel",
-            "type": "object"
-        },
-        "secrets_schema": null,
-        "source_url": "https://github.com/ambrosekuo/default_domino_pieces/tree/main/pieces/LogPiece"
-    },
-    "SleepPiece": {
-        "name": "SleepPiece",
-        "dependency": {
-            "dockerfile": null,
-            "requirements_file": "requirements_0.txt"
-        },
-        "tags": [
-            "default",
-            "sleep"
-        ],
-        "style": {
-            "node_label": "Sleep",
-            "node_type": "default",
-            "node_style": {
-                "backgroundColor": "#ebebeb"
-            },
-            "useIcon": true,
-            "icon_class_name": "fa-solid:hourglass-start",
-            "iconStyle": {
-                "cursor": "pointer"
-            }
-        },
-        "description": "A Piece that sleeps for a given number of seconds.",
-        "input_schema": {
-            "description": "Sleep Piece Input Model",
-            "properties": {
-                "sleep_time": {
+                "number_of_items": {
                     "default": 1,
-                    "description": "Number of seconds to sleep",
-                    "title": "Sleep Time",
-                    "type": "number"
+                    "description": "Number of items to generate.",
+                    "title": "Number Of Items",
+                    "type": "integer"
                 }
             },
             "title": "InputModel",
             "type": "object"
         },
         "output_schema": {
-            "description": "Sleep Piece Output Model",
+            "description": "LoremIpsumGeneratorPiece Output Model",
             "properties": {
-                "message": {
-                    "description": "Sleep piece executed",
-                    "title": "Message",
+                "output_text": {
+                    "description": "Generated text.",
+                    "title": "Output Text",
                     "type": "string"
                 }
             },
             "required": [
-                "message"
+                "output_text"
             ],
             "title": "OutputModel",
             "type": "object"
         },
         "secrets_schema": null,
-        "source_url": "https://github.com/ambrosekuo/default_domino_pieces/tree/main/pieces/SleepPiece"
-    },
-    "GetDateTimePiece": {
-        "name": "GetDateTimePiece",
-        "dependency": {
-            "dockerfile": null,
-            "requirements_file": "requirements_0.txt"
-        },
-        "tags": [
-            "default",
-            "datetime"
-        ],
-        "style": {
-            "node_label": "Get Datetime",
-            "node_type": "default",
-            "node_style": {
-                "backgroundColor": "#ebebeb"
-            },
-            "useIcon": true,
-            "icon_class_name": "fa:calendar-o",
-            "iconStyle": {
-                "cursor": "pointer"
-            }
-        },
-        "description": "A Piece that gets system's current date and time.",
-        "input_schema": {
-            "$defs": {
-                "TZOptions": {
-                    "enum": [
-                        "(UTC-11) - Pacific/Pago_Pago",
-                        "(UTC-10) - US/Hawaii",
-                        "(UTC-09) - Pacific/Gambier",
-                        "(UTC-08) - US/Alaska",
-                        "(UTC-07) - US/Pacific",
-                        "(UTC-06) - US/Mountain",
-                        "(UTC-05) - US/Central",
-                        "(UTC-04) - US/Eastern",
-                        "(UTC-03) - Canada/Atlantic",
-                        "(UTC-02) - Atlantic/South_Georgia",
-                        "(UTC-01) - Atlantic/Cape_Verde",
-                        "(UTC+00) - UTC",
-                        "(UTC+01) - Europe/London",
-                        "(UTC+02) - Europe/Zurich",
-                        "(UTC+03) - Indian/Mayotte",
-                        "(UTC+04) - Asia/Tehran",
-                        "(UTC+05) - Asia/Kathmandu",
-                        "(UTC+06) - Indian/Cocos",
-                        "(UTC+07) - Indian/Christmas",
-                        "(UTC+08) - Australia/Eucla",
-                        "(UTC+09) - Australia/Darwin",
-                        "(UTC+10) - Australia/Lord_Howe",
-                        "(UTC+11) - Pacific/Pohnpei",
-                        "(UTC+12) - Pacific/Chatham",
-                        "(UTC+13) - Pacific/Tongatapu",
-                        "(UTC+14) - Pacific/Kiritimati"
-                    ],
-                    "title": "TZOptions",
-                    "type": "string"
-                }
-            },
-            "description": "GetDateTimePiece Input Model",
-            "properties": {
-                "use_timezone": {
-                    "default": false,
-                    "description": "Whether to use a timezone for the timestamp.",
-                    "title": "Use Timezone",
-                    "type": "boolean"
-                },
-                "timezone": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/TZOptions"
-                        }
-                    ],
-                    "default": "(UTC+00) - UTC",
-                    "description": "Timezone to use for timestamp."
-                }
-            },
-            "title": "InputModel",
-            "type": "object"
-        },
-        "output_schema": {
-            "description": "GetDateTimePiece Output Model",
-            "properties": {
-                "date": {
-                    "description": "Date of the timestamp, in ISO format.",
-                    "format": "date",
-                    "title": "Date",
-                    "type": "string"
-                },
-                "time": {
-                    "description": "Time of the timestamp, in ISO format.",
-                    "format": "time",
-                    "title": "Time",
-                    "type": "string"
-                },
-                "datetime": {
-                    "description": "Datetime of the timestamp, in ISO format.",
-                    "format": "date-time",
-                    "title": "Datetime",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "date",
-                "time",
-                "datetime"
-            ],
-            "title": "OutputModel",
-            "type": "object"
-        },
-        "secrets_schema": null,
-        "source_url": "https://github.com/ambrosekuo/default_domino_pieces/tree/main/pieces/GetDateTimePiece"
-    },
-    "SaveImagePiece": {
-        "name": "SaveImagePiece",
-        "dependency": {
-            "dockerfile": null,
-            "requirements_file": "requirements_0.txt"
-        },
-        "tags": [
-            "default",
-            "image"
-        ],
-        "style": {
-            "node_label": "Save Image",
-            "node_type": "default",
-            "node_style": {
-                "backgroundColor": "#ebebeb"
-            },
-            "useIcon": true,
-            "icon_class_name": "material-symbols:image-outline",
-            "iconStyle": {
-                "cursor": "pointer"
-            }
-        },
-        "description": "Save base64 as image file to results folder.",
-        "input_schema": {
-            "properties": {
-                "base64_data": {
-                    "description": "Input data to be saved as image.",
-                    "title": "Base64 Data",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "base64_data"
-            ],
-            "title": "InputModel",
-            "type": "object"
-        },
-        "output_schema": {
-            "properties": {
-                "output_image_path": {
-                    "description": "Output file path of the saved image.",
-                    "title": "Output Image Path",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "output_image_path"
-            ],
-            "title": "OutputModel",
-            "type": "object"
-        },
-        "secrets_schema": null,
-        "source_url": "https://github.com/ambrosekuo/default_domino_pieces/tree/main/pieces/SaveImagePiece"
-    },
-    "StringOperationsPiece": {
-        "name": "StringOperationsPiece",
-        "dependency": {
-            "dockerfile": null,
-            "requirements_file": "requirements_0.txt"
-        },
-        "tags": [
-            "default",
-            "string"
-        ],
-        "style": {
-            "node_label": "String Operations",
-            "node_type": "default",
-            "node_style": {
-                "backgroundColor": "#ebebeb"
-            },
-            "useIcon": true,
-            "icon_class_name": "tabler:sort-a-z",
-            "iconStyle": {
-                "cursor": "pointer"
-            }
-        },
-        "description": "A Piece that performs string operations",
-        "input_schema": {
-            "$defs": {
-                "OperationItem": {
-                    "properties": {
-                        "operation": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/$defs/OperationsTypes"
-                                }
-                            ],
-                            "description": "Operation to perform. Options: `concatenate`, `lower_case`, `upper_case`, `split_by`, `replace_by`.",
-                            "from_upstream": "never"
-                        },
-                        "second_argument": {
-                            "default": "",
-                            "description": "Value for the second argument.",
-                            "title": "Second Argument",
-                            "type": "string"
-                        },
-                        "auxiliary_argument": {
-                            "default": "",
-                            "description": "Auxiliary argument for `split_by` and `replace_by` operations.\nIf `split_by` is selected, this argument will be used as the index of the split array.\nIf `replace_by` is selected, this argument will be used as the string to replace.\n",
-                            "title": "Auxiliary Argument",
-                            "type": "string"
-                        }
-                    },
-                    "required": [
-                        "operation"
-                    ],
-                    "title": "OperationItem",
-                    "type": "object"
-                },
-                "OperationsTypes": {
-                    "enum": [
-                        "concatenate",
-                        "lower_case",
-                        "upper_case",
-                        "split_by",
-                        "replace_by",
-                        "strip_spaces"
-                    ],
-                    "title": "OperationsTypes",
-                    "type": "string"
-                }
-            },
-            "properties": {
-                "first_argument": {
-                    "description": "Value for the first argument.",
-                    "title": "First Argument",
-                    "type": "string"
-                },
-                "operations": {
-                    "description": "Sequence of operations to perform.",
-                    "items": {
-                        "$ref": "#/$defs/OperationItem"
-                    },
-                    "title": "Operations",
-                    "type": "array"
-                }
-            },
-            "required": [
-                "first_argument",
-                "operations"
-            ],
-            "title": "InputModel",
-            "type": "object"
-        },
-        "output_schema": {
-            "properties": {
-                "output_string": {
-                    "description": "Output string.",
-                    "title": "Output String",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "output_string"
-            ],
-            "title": "OutputModel",
-            "type": "object"
-        },
-        "secrets_schema": null,
-        "source_url": "https://github.com/ambrosekuo/default_domino_pieces/tree/main/pieces/StringOperationsPiece"
+        "source_url": "https://github.com/ambrosekuo/default_domino_pieces/tree/main/pieces/LoremIpsumGeneratorPiece"
     },
     "ImageFilterPiece": {
         "name": "ImageFilterPiece",
@@ -1544,61 +1465,130 @@
         "secrets_schema": null,
         "source_url": "https://github.com/ambrosekuo/default_domino_pieces/tree/main/pieces/StringConditionChecksPiece"
     },
-    "ToyDatasetsPiece": {
-        "name": "ToyDatasetsPiece",
+    "LogPiece": {
+        "name": "LogPiece",
         "dependency": {
             "dockerfile": null,
             "requirements_file": "requirements_0.txt"
         },
         "tags": [
             "default",
-            "datasets"
+            "log"
         ],
         "style": {
-            "node_label": "Toy Datasets",
+            "node_label": "Log",
             "node_type": "default",
             "node_style": {
                 "backgroundColor": "#ebebeb"
             },
             "useIcon": true,
-            "icon_class_name": "lucide:toy-brick",
+            "icon_class_name": "fa-solid:file-alt",
             "iconStyle": {
                 "cursor": "pointer"
             }
         },
-        "description": "Load toy datasets from scikit-learn",
+        "description": "A Piece that logs its inputs.",
         "input_schema": {
             "$defs": {
-                "DatasetName": {
+                "InputEnum": {
                     "enum": [
-                        "iris",
-                        "diabetes",
-                        "digits",
-                        "wine",
-                        "breast_cancer",
-                        "linnerrud"
+                        "option1",
+                        "option2",
+                        "option3"
                     ],
-                    "title": "DatasetName",
+                    "title": "InputEnum",
                     "type": "string"
                 }
             },
+            "description": "LogPiece Input Model",
             "properties": {
-                "dataset": {
+                "input_str": {
+                    "default": "default value",
+                    "description": "Input string to be logged.",
+                    "title": "Input Str",
+                    "type": "string"
+                },
+                "input_int": {
+                    "default": 10,
+                    "description": "Input integer to be logged.",
+                    "title": "Input Int",
+                    "type": "integer"
+                },
+                "input_float": {
+                    "default": 10.5,
+                    "description": "Input float to be logged.",
+                    "title": "Input Float",
+                    "type": "number"
+                },
+                "input_bool": {
+                    "default": false,
+                    "description": "Input boolean to be logged.",
+                    "title": "Input Bool",
+                    "type": "boolean"
+                },
+                "input_enum": {
                     "allOf": [
                         {
-                            "$ref": "#/$defs/DatasetName"
+                            "$ref": "#/$defs/InputEnum"
                         }
                     ],
-                    "default": "iris",
-                    "title": "Dataset name"
+                    "default": "option1",
+                    "description": "Input enum to be logged."
+                },
+                "input_date": {
+                    "default": "2023-01-01",
+                    "description": "Input date to be logged.",
+                    "format": "date",
+                    "title": "Input Date",
+                    "type": "string"
+                },
+                "input_time": {
+                    "default": "16:20:00",
+                    "description": "Input time to be logged.",
+                    "format": "time",
+                    "title": "Input Time",
+                    "type": "string"
+                },
+                "input_datetime": {
+                    "default": "2023-01-01T16:20:00",
+                    "description": "Input datetime to be logged.",
+                    "format": "date-time",
+                    "title": "Input Datetime",
+                    "type": "string"
+                },
+                "input_array": {
+                    "default": [
+                        "default_1",
+                        "default_2",
+                        "default_3"
+                    ],
+                    "description": "Input array to be logged.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "title": "Input Array",
+                    "type": "array"
+                },
+                "input_code": {
+                    "default": "print('Hello world!')",
+                    "description": "Input code to be logged.",
+                    "title": "Input Code",
+                    "type": "string",
+                    "widget": "codeeditor"
                 }
             },
             "title": "InputModel",
             "type": "object"
         },
         "output_schema": {
+            "description": "LogPiece Output Model",
             "properties": {
-                "file_path": {
+                "output_log": {
+                    "description": "All values logged.",
+                    "title": "Output Log",
+                    "type": "string"
+                },
+                "output_str": {
                     "anyOf": [
                         {
                             "type": "string"
@@ -1607,97 +1597,107 @@
                             "type": "null"
                         }
                     ],
-                    "default": null,
-                    "title": "File path"
+                    "description": "Output string logged.",
+                    "title": "Output Str"
+                },
+                "output_int": {
+                    "anyOf": [
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "Output integer logged.",
+                    "title": "Output Int"
+                },
+                "output_float": {
+                    "anyOf": [
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "Output float logged.",
+                    "title": "Output Float"
+                },
+                "output_bool": {
+                    "anyOf": [
+                        {
+                            "type": "boolean"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "Output boolean logged.",
+                    "title": "Output Bool"
+                },
+                "output_enum": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "Output enum logged.",
+                    "title": "Output Enum"
+                },
+                "output_date": {
+                    "description": "Output date logged.",
+                    "format": "date",
+                    "title": "Output Date",
+                    "type": "string"
+                },
+                "output_time": {
+                    "description": "Output time logged.",
+                    "format": "time",
+                    "title": "Output Time",
+                    "type": "string"
+                },
+                "output_datetime": {
+                    "description": "Output datetime logged.",
+                    "format": "date-time",
+                    "title": "Output Datetime",
+                    "type": "string"
+                },
+                "output_array": {
+                    "description": "Output array logged.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "title": "Output Array",
+                    "type": "array"
+                },
+                "output_code": {
+                    "description": "Output code logged.",
+                    "title": "Output Code",
+                    "type": "string",
+                    "widget": "codeeditor"
                 }
             },
+            "required": [
+                "output_log",
+                "output_str",
+                "output_int",
+                "output_float",
+                "output_bool",
+                "output_enum",
+                "output_date",
+                "output_time",
+                "output_datetime",
+                "output_array",
+                "output_code"
+            ],
             "title": "OutputModel",
             "type": "object"
         },
         "secrets_schema": null,
-        "source_url": "https://github.com/ambrosekuo/default_domino_pieces/tree/main/pieces/ToyDatasetsPiece"
-    },
-    "DataConversionPiece": {
-        "name": "DataConversionPiece",
-        "dependency": {
-            "dockerfile": null,
-            "requirements_file": "requirements_0.txt"
-        },
-        "tags": [
-            "data",
-            "conversion",
-            "default"
-        ],
-        "style": {
-            "node_label": "Data Conversion Piece",
-            "node_type": "default",
-            "node_style": {
-                "backgroundColor": "#ebebeb"
-            },
-            "useIcon": true,
-            "icon_class_name": "icon-park-outline:file-conversion",
-            "iconStyle": {
-                "cursor": "pointer"
-            }
-        },
-        "description": "Convert data from one format to another",
-        "input_schema": {
-            "$defs": {
-                "DataFormatOption": {
-                    "enum": [
-                        "csv",
-                        "json"
-                    ],
-                    "title": "DataFormatOption",
-                    "type": "string"
-                }
-            },
-            "properties": {
-                "input_data": {
-                    "description": "Input data to be converted. Can be a file path or data as string.",
-                    "title": "Input Data",
-                    "type": "string"
-                },
-                "input_data_format": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/DataFormatOption"
-                        }
-                    ],
-                    "default": "csv",
-                    "description": "Input data format to be converted."
-                },
-                "output_data_format": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/DataFormatOption"
-                        }
-                    ],
-                    "default": "json",
-                    "description": "Output data format."
-                }
-            },
-            "required": [
-                "input_data"
-            ],
-            "title": "InputModel",
-            "type": "object"
-        },
-        "output_schema": {
-            "properties": {
-                "output_file_path": {
-                    "description": "Path to the converted file.",
-                    "title": "Output File Path",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "output_file_path"
-            ],
-            "title": "OutputModel",
-            "type": "object"
-        },
-        "secrets_schema": null,
-        "source_url": "https://github.com/ambrosekuo/default_domino_pieces/tree/main/pieces/DataConversionPiece"
+        "source_url": "https://github.com/ambrosekuo/default_domino_pieces/tree/main/pieces/LogPiece"
     }
 }
